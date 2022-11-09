@@ -2,23 +2,26 @@
 
 $(function () {
   // socket.io client side connection
-  var socket = io.connect(); // obtaining DOM elements from the Chat Interface
+  var socket = io.connect();
 
+  // obtaining DOM elements from the Chat Interface
   var $messageForm = $("#message-form");
   var $messageBox = $("#message");
-  var $chat = $("#chat"); // obtaining DOM elements from the NicknameForm Interface
+  var $chat = $("#chat");
 
+  // obtaining DOM elements from the NicknameForm Interface
   var $nickForm = $("#nickForm");
   var $nickError = $("#nickError");
-  var $nickname = $("#nickname"); // obtaining the usernames container DOM
+  var $nickname = $("#nickname");
 
+  // obtaining the usernames container DOM
   var $users = $("#usernames");
   $nickForm.submit(function (e) {
     e.preventDefault();
     socket.emit("new user", $nickname.val(), function (data) {
       if (data) {
-        $("#nickWrap").hide(); // $('#contentWrap').show();
-
+        $("#nickWrap").hide();
+        // $('#contentWrap').show();
         document.querySelector("#contentWrap").style.display = "flex";
         $("#message").focus();
       } else {
@@ -26,8 +29,9 @@ $(function () {
       }
     });
     $nickname.val("");
-  }); // events
+  });
 
+  // events
   $messageForm.submit(function (e) {
     e.preventDefault();
     socket.emit("send message", $messageBox.val(), function (data) {
@@ -40,11 +44,9 @@ $(function () {
   });
   socket.on("usernames", function (data) {
     var html = "";
-
     for (i = 0; i < data.length; i++) {
       html += "<p><i class=\"fas fa-user\"></i> ".concat(data[i], "</p>");
     }
-
     $users.html(html);
   });
   socket.on("whisper", function (data) {
@@ -55,7 +57,6 @@ $(function () {
       displayMsg(msgs[_i]);
     }
   });
-
   function displayMsg(data) {
     $chat.append("<p class=\"p-2 bg-secondary w-75 animate__animated animate__backInUp\"><b>".concat(data.nick, "</b>: ").concat(data.msg, "</p>"));
     var chat = document.querySelector("#chat");
